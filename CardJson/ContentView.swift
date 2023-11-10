@@ -61,26 +61,29 @@ struct ContentView: View {
         if searchvalue.isEmpty {
             return cardViewModel.cards
         } else {
-            return cardViewModel.cards.filter{ $0.name.contains(searchvalue) }
+            return cardViewModel.cards.filter{$0.name.lowercased().contains(searchvalue.lowercased())}
         }
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(filteredCard) { card in
-                HStack {
-                    AsyncImage(url: URL(string: card.imageUrl ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp_9jJ4eO7bVSx4KtliS0KK4ydiOpWojSvrdyFqbk&"))
+                HStack(alignment: .center, content: {
+                    Text("something")
+                        .padding(.trailing)
                     VStack(alignment: .leading, content: {
-                        Text("\(card.name)")
-                            .font(.title2)
+                        Text(card.name)
+                            .font(.headline)
                             .bold()
                         Text(card.rarity)
-                            .font(.caption)
-                            .padding(.bottom)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .padding(.bottom, 15)
                         Text(card.oracleText)
                             .font(.caption2)
                     })
-                }
+                    .padding(.vertical, 10)
+                })
             }
             .searchable(text: $searchvalue, prompt: "Search Card")
             .navigationTitle("Cards")
