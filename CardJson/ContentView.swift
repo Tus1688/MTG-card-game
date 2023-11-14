@@ -7,47 +7,41 @@
 
 import SwiftUI
 
-struct Card: Codable, Identifiable {
-    let id: String
-    let name: String
-    let manaCost: String
-    let typeLine: String
-    let oracleText: String
-    let colors: [String]
-    let rarity: String
-    let set: String
-    let imageUrl: String?
+struct CardImageView: View {
+    let card: Card
     
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case manaCost = "mana_cost"
-        case typeLine = "type_line"
-        case oracleText = "oracle_text"
-        case colors
-        case rarity
-        case set
-        case imageUrl = "image_uris.normal"
-    }
-}
-
-struct CardResponse: Codable {
-    let data: [Card]
-}
-
-class CardViewModel: ObservableObject {
-    @Published var cards: [Card] = [
-    ]
-    
-    init() {
-        if let url = Bundle.main.url(forResource: "WOT-Scryfall", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(CardResponse.self, from: data)
-                self.cards = response.data
-            } catch {
-                print("error decoding json: \(error)")
+    var body: some View {
+        ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
+            if let imageUris = card.imageUrl {
+                AsyncImage(url: imageUris.small) { image in
+                    image.resizable()
+                } placeholder: {
+                    Color.secondary.frame(width: 80, height: 120)
+                        .opacity(0.6)
+                }
+                .frame(width: 80, height: 120)
+                .cornerRadius(6)
+                
+                if card.foil == true{
+                    Text("F")
+                        .fontWeight(.bold)
+                        .font(.caption2)
+                        .padding(4)
+                        .background(Color.accentColor.opacity(0.7))
+                        .cornerRadius(4)
+                        .padding([.bottom, .leading], 4)
+                }
+                
+                if card.nonfoil == true {
+                    Text("N")
+                        .fontWeight(.bold)
+                        .font(.caption2)
+                        .padding(4)
+                        .background(Color.indigo.opacity(0.7))
+                        .cornerRadius(4)
+                        .padding([.leading], 22)
+                        .padding([.bottom], 4)
+                }
             }
         }
     }
@@ -69,8 +63,7 @@ struct ContentView: View {
         NavigationStack {
             List(filteredCard) { card in
                 HStack(alignment: .center, content: {
-                    Text("something")
-                        .padding(.trailing)
+                    CardImageView(card: card)
                     VStack(alignment: .leading, content: {
                         Text(card.name)
                             .font(.headline)
@@ -79,14 +72,14 @@ struct ContentView: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                             .padding(.bottom, 15)
-                        Text(card.oracleText)
+                        Text(card.oracleText ?? "")
                             .font(.caption2)
                     })
                     .padding(.vertical, 10)
                 })
             }
             .searchable(text: $searchvalue, prompt: "Search Card")
-            .navigationTitle("Cards")
+            .navigationTitle("Card List")
         }
     }
 }

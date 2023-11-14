@@ -15,6 +15,7 @@
 		042AB0312AFDCC76009F4104 /* CardJsonUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042AB0302AFDCC76009F4104 /* CardJsonUITests.swift */; };
 		042AB0332AFDCC76009F4104 /* CardJsonUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042AB0322AFDCC76009F4104 /* CardJsonUITestsLaunchTests.swift */; };
 		042AB0402AFDCC97009F4104 /* WOT-Scryfall.json in Resources */ = {isa = PBXBuildFile; fileRef = 042AB03F2AFDCC97009F4104 /* WOT-Scryfall.json */; };
+		042AB0422AFDFBAA009F4104 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042AB0412AFDFBAA009F4104 /* CardViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		042AB0302AFDCC76009F4104 /* CardJsonUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardJsonUITests.swift; sourceTree = "<group>"; };
 		042AB0322AFDCC76009F4104 /* CardJsonUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardJsonUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		042AB03F2AFDCC97009F4104 /* WOT-Scryfall.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "WOT-Scryfall.json"; sourceTree = "<group>"; };
+		042AB0412AFDFBAA009F4104 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				042AB0172AFDCC75009F4104 /* ContentView.swift */,
 				042AB0192AFDCC76009F4104 /* Assets.xcassets */,
 				042AB01B2AFDCC76009F4104 /* Preview Content */,
+				042AB0412AFDFBAA009F4104 /* CardViewModel.swift */,
 			);
 			path = CardJson;
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 			files = (
 				042AB0182AFDCC75009F4104 /* ContentView.swift in Sources */,
 				042AB0162AFDCC75009F4104 /* CardJsonApp.swift in Sources */,
+				042AB0422AFDFBAA009F4104 /* CardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
