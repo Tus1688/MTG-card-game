@@ -7,61 +7,34 @@
 
 import SwiftUI
 
-struct CardImageView: View {
-    let card: Card
-    
-    var body: some View {
-        ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
-            if let imageUris = card.imageUrl {
-                AsyncImage(url: imageUris.small) { image in
-                    image.resizable()
-                } placeholder: {
-                    Color.secondary.frame(width: 80, height: 120)
-                        .opacity(0.6)
-                }
-                .frame(width: 80, height: 120)
-                .cornerRadius(6)
-                
-                if card.foil == true{
-                    Text("F")
-                        .fontWeight(.bold)
-                        .font(.caption2)
-                        .padding(4)
-                        .background(Color.accentColor.opacity(0.7))
-                        .cornerRadius(4)
-                        .padding([.bottom, .leading], 4)
-                }
-                
-                if card.nonfoil == true {
-                    Text("N")
-                        .fontWeight(.bold)
-                        .font(.caption2)
-                        .padding(4)
-                        .background(Color.indigo.opacity(0.7))
-                        .cornerRadius(4)
-                        .padding([.leading], 22)
-                        .padding([.bottom], 4)
-                }
-            }
-        }
-    }
-}
-
 struct ContentView: View {
     @ObservedObject var cardViewModel = CardViewModel()
     @State var searchvalue = ""
+    @State var sortingAscending: Bool? = nil
     
-    var filteredCard: [Card] {
-        if searchvalue.isEmpty {
-            return cardViewModel.cards
-        } else {
-            return cardViewModel.cards.filter{$0.name.lowercased().contains(searchvalue.lowercased())}
+    var filteredCards: [Card] {
+        var sortedCards = cardViewModel.cards
+        
+        if let isAscending = sortingAscending {
+            sortedCards.sort(by: { card1, card2 in
+                if isAscending {
+                    return card1.name < card2.name
+                } else {
+                    return card1.name > card2.name
+                }
+            })
         }
+        
+        if !searchvalue.isEmpty {
+            sortedCards = sortedCards.filter { $0.name.lowercased().contains(searchvalue.lowercased()) }
+        }
+        
+        return sortedCards
     }
     
     var body: some View {
         NavigationStack {
-            List(filteredCard) { card in
+            List(filteredCards) { card in
                 HStack(alignment: .center, content: {
                     CardImageView(card: card)
                     VStack(alignment: .leading, content: {
@@ -80,6 +53,19 @@ struct ContentView: View {
             }
             .searchable(text: $searchvalue, prompt: "Search Card")
             .navigationTitle("Card List")
+            .navigationBarItems(trailing: Button(action: {
+                if sortingAscending == nil {
+                    sortingAscending = true
+                } else if sortingAscending == true {
+                    sortingAscending = false
+                } else {
+                    sortingAscending = nil
+                }
+            }) {
+                Text(sortingAscending == nil ? "Sort" : (sortingAscending! ? "Desc" : "Cancel"))
+                    .padding(.horizontal)
+                    .foregroundColor(sortingAscending == nil || sortingAscending == true ? .blue : .red)
+            })
         }
     }
 }
