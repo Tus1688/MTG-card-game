@@ -46,3 +46,13 @@ struct CardImageView: View {
         }
     }
 }
+
+private struct previewCardImageView: View {
+    @ObservedObject var cardViewModel = CardViewModel()
+    var body: some View{
+        CardImageView(card: cardViewModel.cards[0])
+    }
+}
+#Preview {
+    previewCardImageView()
+}

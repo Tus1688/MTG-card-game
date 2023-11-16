@@ -17,6 +17,7 @@
 		042AB0402AFDCC97009F4104 /* WOT-Scryfall.json in Resources */ = {isa = PBXBuildFile; fileRef = 042AB03F2AFDCC97009F4104 /* WOT-Scryfall.json */; };
 		042AB0422AFDFBAA009F4104 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042AB0412AFDFBAA009F4104 /* CardViewModel.swift */; };
 		04659FC42B03BABD00CAF61D /* CardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04659FC32B03BABD00CAF61D /* CardImageView.swift */; };
+		04D27A592B05C83A00550E65 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D27A582B05C83A00550E65 /* CardDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		042AB03F2AFDCC97009F4104 /* WOT-Scryfall.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "WOT-Scryfall.json"; sourceTree = "<group>"; };
 		042AB0412AFDFBAA009F4104 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		04659FC32B03BABD00CAF61D /* CardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageView.swift; sourceTree = "<group>"; };
+		04D27A582B05C83A00550E65 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				042AB01B2AFDCC76009F4104 /* Preview Content */,
 				042AB0412AFDFBAA009F4104 /* CardViewModel.swift */,
 				04659FC32B03BABD00CAF61D /* CardImageView.swift */,
+				04D27A582B05C83A00550E65 /* CardDetailView.swift */,
 			);
 			path = CardJson;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 			files = (
 				042AB0182AFDCC75009F4104 /* ContentView.swift in Sources */,
 				042AB0162AFDCC75009F4104 /* CardJsonApp.swift in Sources */,
+				04D27A592B05C83A00550E65 /* CardDetailView.swift in Sources */,
 				04659FC42B03BABD00CAF61D /* CardImageView.swift in Sources */,
 				042AB0422AFDFBAA009F4104 /* CardViewModel.swift in Sources */,
 			);

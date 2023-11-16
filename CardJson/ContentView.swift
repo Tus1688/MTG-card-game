@@ -33,24 +33,27 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             List(filteredCards) { card in
-                HStack(alignment: .center, content: {
-                    CardImageView(card: card)
-                    VStack(alignment: .leading, content: {
-                        Text(card.name)
-                            .font(.headline)
-                            .bold()
-                        Text(card.rarity)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .padding(.bottom, 15)
-                        Text(card.oracleText ?? "")
-                            .font(.caption2)
-                    })
-                    .padding(.vertical, 10)
-                })
+                NavigationLink(destination: CardDetailView(card: card)) {
+                    HStack(alignment: .center) {
+                        CardImageView(card: card)
+                        VStack(alignment: .leading) {
+                            Text(card.name)
+                                .font(.headline)
+                                .bold()
+                            Text(card.rarity)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .padding(.bottom, 15)
+                            Text(card.oracleText ?? "")
+                                .font(.caption2)
+                        }
+                        .padding(.vertical, 10)
+                    }
+                }
             }
+            .listStyle(PlainListStyle())
             .searchable(text: $searchvalue, prompt: "Search Card")
             .navigationTitle("Card List")
             .navigationBarItems(trailing: Button(action: {
@@ -62,9 +65,8 @@ struct ContentView: View {
                     sortingAscending = nil
                 }
             }) {
-                Text(sortingAscending == nil ? "Sort" : (sortingAscending! ? "Desc" : "Cancel"))
+                Text(sortingAscending == nil ? "Sort A-Z" : (sortingAscending! ? "Sort Z-A" : "Clear Sort"))
                     .padding(.horizontal)
-                    .foregroundColor(sortingAscending == nil || sortingAscending == true ? .blue : .red)
             })
         }
     }

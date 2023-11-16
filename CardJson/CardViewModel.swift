@@ -21,7 +21,7 @@ struct Card: Codable, Identifiable {
     let foil: Bool?
     let nonfoil: Bool?
     let reserved: Bool?
-    let legalities: Legalities?
+    let legalities: Legalities
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -70,27 +70,27 @@ struct ImageUris: Codable {
 }
 
 struct Legalities: Codable {
-    let standard: String?
-    let future: String?
-    let historic: String?
-    let gladiator: String?
-    let pioneer: String?
-    let explorer: String?
-    let modern: String?
-    let legacy: String?
-    let pauper: String?
-    let vintage: String?
-    let penny: String?
-    let commander: String?
-    let oathbreaker: String?
-    let brawl: String?
-    let historicbrawl: String?
-    let alchemy: String?
-    let paupercommander: String?
-    let duel: String?
-    let oldschool: String?
-    let premodern: String?
-    let predh: String?
+    let standard: String
+    let future: String
+    let historic: String
+    let gladiator: String
+    let pioneer: String
+    let explorer: String
+    let modern: String
+    let legacy: String
+    let pauper: String
+    let vintage: String
+    let penny: String
+    let commander: String
+    let oathbreaker: String
+    let brawl: String
+    let historicbrawl: String
+    let alchemy: String
+    let paupercommander: String
+    let duel: String
+    let oldschool: String
+    let premodern: String
+    let predh: String
 }
 
 struct CardResponse: Codable {
