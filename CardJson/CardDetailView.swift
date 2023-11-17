@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct CardDetailView: View {
-    let card: Card
+    let cards: [Card]
+    @State private var currentCardIndex: Int
     @State private var isPeeking = false
+    
+    init(cards: [Card], initialIndex: Int) {
+        self.cards = cards
+        _currentCardIndex = State(initialValue: initialIndex)
+    }
     
     var body: some View {
         ZStack {
             ScrollView {
                 VStack(alignment: .center, content: {
-                    if let imageUris = card.imageUrl {
+                    if let imageUris = cards[currentCardIndex].imageUrl {
                         AsyncImage(url: imageUris.artCrop) { image in
                             image.resizable()
                                 .aspectRatio(contentMode: .fit)
@@ -32,16 +38,16 @@ struct CardDetailView: View {
                     }
                     HStack(alignment: .top , content: {
                         VStack(alignment: .leading, content: {
-                            Text(card.name)
+                            Text(cards[currentCardIndex].name)
                                 .multilineTextAlignment(.leading)
                                 .font(.title2)
                                 .bold()
-                            Text(card.typeLine ?? "")
+                            Text(cards[currentCardIndex].typeLine ?? "")
                                 .multilineTextAlignment(.leading)
                                 .font(.subheadline)
                         })
                         Spacer()
-                        if let manaCost = card.manaCost {
+                        if let manaCost = cards[currentCardIndex].manaCost {
                             HStack(spacing: 5) {
                                 ForEach(Array(manaCost.replacingOccurrences(of: "{", with: "").replacingOccurrences(of: "}", with: "")), id: \.self) { char in
                                     Text(String(char))
@@ -56,7 +62,7 @@ struct CardDetailView: View {
                         }
                     })
                     .padding(.vertical)
-                    Text(card.oracleText ?? "")
+                    Text(cards[currentCardIndex].oracleText ?? "")
                         .font(.caption)
                         .padding()
                         .background(Color.secondary.opacity(0.2))
@@ -68,9 +74,21 @@ struct CardDetailView: View {
                             .padding(.top)
                         Spacer()
                     }
-                    legalitiesView(legalities: card.legalities)
+                    legalitiesView(legalities: cards[currentCardIndex].legalities)
                 })
                 .padding()
+                .gesture(
+                           DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                               .onEnded { gesture in
+                                   if gesture.translation.width < 0 && currentCardIndex < cards.count - 1 {
+                                       // Swiped left to go forward
+                                       currentCardIndex += 1
+                                   } else if gesture.translation.width > 0 && currentCardIndex > 0 {
+                                       // Swiped right to go back
+                                       currentCardIndex -= 1
+                                   }
+                               }
+                       )
             }
             
             if isPeeking {
@@ -80,7 +98,7 @@ struct CardDetailView: View {
                         isPeeking = false
                     }
                 
-                if let imageUris = card.imageUrl {
+                if let imageUris = cards[currentCardIndex].imageUrl {
                     AsyncImage(url: imageUris.large) { image in
                         image.resizable()
                             .aspectRatio(contentMode: .fit)
@@ -171,7 +189,7 @@ private struct legalitiesView: View {
 private struct previewCardDetailView: View {
     @ObservedObject var cardViewModel = CardViewModel()
     var body: some View {
-        CardDetailView(card: cardViewModel.cards[0])
+        CardDetailView(cards: cardViewModel.cards, initialIndex: 1)
     }
 }
 

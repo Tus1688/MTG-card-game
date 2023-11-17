@@ -35,7 +35,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List(filteredCards) { card in
-                NavigationLink(destination: CardDetailView(card: card)) {
+                NavigationLink(destination: CardDetailView(cards: cardViewModel.cards, initialIndex: cardViewModel.cards.firstIndex(where: { $0.id == card.id }) ?? 0)) {
                     HStack(alignment: .center) {
                         CardImageView(card: card)
                         VStack(alignment: .leading) {
