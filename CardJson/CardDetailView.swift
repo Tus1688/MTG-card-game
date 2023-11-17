@@ -11,6 +11,7 @@ struct CardDetailView: View {
     let cards: [Card]
     @State private var currentCardIndex: Int
     @State private var isPeeking = false
+    @State private var offset: CGFloat = 0
     
     init(cards: [Card], initialIndex: Int) {
         self.cards = cards
@@ -18,6 +19,29 @@ struct CardDetailView: View {
     }
     
     var body: some View {
+        let dragGesture = DragGesture()
+            .onChanged { gesture in
+                offset = gesture.translation.width
+            }
+            .onEnded { gesture in
+                let dragThreshold: CGFloat = 100
+                if gesture.translation.width < -dragThreshold && currentCardIndex < cards.count - 1 {
+                    withAnimation {
+                        currentCardIndex += 1
+                        offset = UIScreen.main.bounds.width // Move to the right
+                    }
+                } else if gesture.translation.width > dragThreshold && currentCardIndex > 0 {
+                    withAnimation {
+                        currentCardIndex -= 1
+                        offset = -UIScreen.main.bounds.width // Move to the left
+                    }
+                } else {
+                    withAnimation {
+                        offset = 0 // Return to the center
+                    }
+                }
+            }
+        
         ZStack {
             ScrollView {
                 VStack(alignment: .center, content: {
@@ -77,18 +101,7 @@ struct CardDetailView: View {
                     legalitiesView(legalities: cards[currentCardIndex].legalities)
                 })
                 .padding()
-                .gesture(
-                           DragGesture(minimumDistance: 20, coordinateSpace: .local)
-                               .onEnded { gesture in
-                                   if gesture.translation.width < 0 && currentCardIndex < cards.count - 1 {
-                                       // Swiped left to go forward
-                                       currentCardIndex += 1
-                                   } else if gesture.translation.width > 0 && currentCardIndex > 0 {
-                                       // Swiped right to go back
-                                       currentCardIndex -= 1
-                                   }
-                               }
-                       )
+                .gesture(dragGesture)
             }
             
             if isPeeking {
@@ -189,7 +202,7 @@ private struct legalitiesView: View {
 private struct previewCardDetailView: View {
     @ObservedObject var cardViewModel = CardViewModel()
     var body: some View {
-        CardDetailView(cards: cardViewModel.cards, initialIndex: 1)
+        CardDetailView(cards: cardViewModel.cards, initialIndex: 0)
     }
 }
 
