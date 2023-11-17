@@ -9,65 +9,99 @@ import SwiftUI
 
 struct CardDetailView: View {
     let card: Card
+    @State private var isPeeking = false
     
     var body: some View {
-        ScrollView {
+        ZStack {
+            ScrollView {
+                VStack(alignment: .center, content: {
+                    if let imageUris = card.imageUrl {
+                        AsyncImage(url: imageUris.artCrop) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: UIScreen.main.bounds.width * 0.9)
+                                .onTapGesture {
+                                    isPeeking.toggle()
+                                }
+                        } placeholder: {
+                            Color.secondary
+                                .opacity(0.6)
+                                .frame(width: UIScreen.main.bounds.width * 0.9)
+                        }
+                        .cornerRadius(14)
+                    }
+                    HStack(alignment: .top , content: {
+                        VStack(alignment: .leading, content: {
+                            Text(card.name)
+                                .multilineTextAlignment(.leading)
+                                .font(.title2)
+                                .bold()
+                            Text(card.typeLine ?? "")
+                                .multilineTextAlignment(.leading)
+                                .font(.subheadline)
+                        })
+                        Spacer()
+                        if let manaCost = card.manaCost {
+                            HStack(spacing: 5) {
+                                ForEach(Array(manaCost.replacingOccurrences(of: "{", with: "").replacingOccurrences(of: "}", with: "")), id: \.self) { char in
+                                    Text(String(char))
+                                        .font(.subheadline)
+                                        .bold()
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(Color.secondary)
+                                        .clipShape(Circle())
+                                }
+                            }
+                        }
+                    })
+                    .padding(.vertical)
+                    Text(card.oracleText ?? "")
+                        .font(.caption)
+                        .padding()
+                        .background(Color.secondary.opacity(0.2))
+                        .cornerRadius(14)
+                    HStack {
+                        Text("Legalities")
+                            .font(.subheadline)
+                            .bold()
+                            .padding(.top)
+                        Spacer()
+                    }
+                    legalitiesView(legalities: card.legalities)
+                })
+                .padding()
+            }
             
-            VStack(alignment: .center, content: {
+            if isPeeking {
+                Color.black.opacity(0.8)
+                    .edgesIgnoringSafeArea(.all) // Dark overlay
+                    .onTapGesture {
+                        isPeeking = false
+                    }
+                
                 if let imageUris = card.imageUrl {
                     AsyncImage(url: imageUris.large) { image in
                         image.resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: UIScreen.main.bounds.width * 0.8)
+                            .frame(width: UIScreen.main.bounds.width * 0.9)
+                            .edgesIgnoringSafeArea(.all)
+                            .onTapGesture {
+                                isPeeking = false
+                            }
                     } placeholder: {
                         Color.secondary
                             .opacity(0.6)
-                            .frame(width: UIScreen.main.bounds.width * 0.8)
+                            .frame(width: UIScreen.main.bounds.width * 0.9)
                     }
                     .cornerRadius(14)
-                }
-                HStack(alignment: .top , content: {
-                    VStack(alignment: .leading, content: {
-                        Text(card.name)
-                            .multilineTextAlignment(.leading)
-                            .font(.title2)
-                            .bold()
-                        Text(card.typeLine ?? "")
-                            .multilineTextAlignment(.leading)
-                            .font(.subheadline)
-                    })
-                    Spacer()
-                    if let manaCost = card.manaCost {
-                        HStack(spacing: 5) {
-                            ForEach(Array(manaCost.replacingOccurrences(of: "{", with: "").replacingOccurrences(of: "}", with: "")), id: \.self) { char in
-                                Text(String(char))
-                                    .font(.subheadline)
-                                    .bold()
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(Color.secondary)
-                                    .clipShape(Circle())
-                            }
-                        }
+                    .onTapGesture {
+                        isPeeking = false
                     }
-                })
-                .padding(.vertical)
-                Text(card.oracleText ?? "")
-                    .font(.caption)
-                    .padding()
-                    .background(Color.secondary.opacity(0.2))
-                    .cornerRadius(14)
-                HStack {
-                    Text("Legalities")
-                        .font(.subheadline)
-                        .bold()
-                        .padding(.top)
-                    Spacer()
                 }
-                legalitiesView(legalities: card.legalities)
-            })
-            .padding()
+            }
         }
+        
     }
 }
 
